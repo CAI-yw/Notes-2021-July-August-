@@ -56,18 +56,86 @@ def next_dir(direction, i): #not so sure
     return direction
   
 def pingpong(n): 
-  i = 1 #count/index
+  i = 1 # count/index
   ppv = 1
   direction = 1
   while i < n:
     direction = next_dir(direction, i)
-    ppv += direction #direction == (1 or -1)
-    i += 1 #count increment by 1
+    ppv += direction # direction == (1 or -1)
+    i += 1 # count increment by 1
   return ppv
 
-  
-   
-  
+#Q4
+def missing_digits(n):
+  if n < 10:
+    return 0 # base case, missing_digits(4) --> 0, no missing number
+  last, rest = n % 10, n // 10
+  return max(last - rest % 10 - 1, 0) + missing_digits(rest)
+"""A tricky case for this problem was handling adjacent numbers that are the same(last - rest % 10 - 1 = -1
+that's why we wrap the digit difference each recursive call with a max comparison call to 0.
+"""
+#solution 2, with herlper fucntion
+def missing_digits_alt(n):
+    def helper(n, digit):
+        if n == 0:
+            return 0  # base case, when the input number n < 10, n // 10 --> 0
+        last, rest = n % 10, n // 10
+        if last == digit or last + 1 == digit:
+            return helper(rest, last)
+        return 1 + helper(n, digit - 1) # if adjacent numbers are neither the same nor continuous, add 1 missing number 
+    return helper(n // 10, n % 10) # diigt initialized to the last number of n
+""" missing_digits_alt(4)
+helper(0, 4) # 4 // 10 --> 0
+return 0
+"""
+
+#Q5
+""" Partitions 
+The number of ways to partition n using integers up to m equals:
+  the number of ways to partition n-m using integers up to m, and
+  the number of ways to partition n using integers up to m-1.
+To complete the implementation, we need to specify the following base cases:
+  There is one way to partition 0: include no parts.
+  There are 0 ways to partition a negative n.
+  There are 0 ways to partition any n greater than 0 using parts of size 0 or less.
+
+>>> def count_partitions(n, m): # how to count the ways to sum up to a final value with smaller parts
+        """Count the ways to partition n using parts up to m."""
+        if n == 0:
+            return 1
+        elif n < 0:
+            return 0
+        elif m == 0:
+            return 0
+        else:
+            return count_partitions(n-m, m) + count_partitions(n, m-1)
+>>> count_partitions(6, 4)
+9
+>>> count_partitions(5, 5)
+7
+"""
+def get_next_coin(coin): 
+   if coin == 1:
+        return 5
+    elif coin == 5:
+        return 10
+    elif coin == 10:
+        return 25
+# >>> get_next_coin(2) # Other values return None
+      
+#takes a positive integer change and returns the number of ways to make change for change using coins
+def count_coins(change): 
+    def constrained_count(change, smallest_coin):
+        if change == 0:
+            return 1
+        if change < 0:
+            return 0
+        if smallest_coin == None:
+            return 0
+        without_coin = constrained_count(change, get_next_coin(smallest_coin))
+        with_coin = constrained_count(change - smallest_coin, smallest_coin)
+        return without_coin + with_coin
+    return constrained_count(change, 1)
   
   
   
