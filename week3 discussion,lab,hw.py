@@ -63,7 +63,7 @@ Q7
     a’ = subset_sum(-3, [12])  false
        a’’= subset_sum(-15, [ ]) false
        b’’= subset_sum(-3, [ ])  false
-       ## not [ ] —> true. ❗️
+       # not [ ] —> true. 
     b’ = subset_sum(-1, [12]) false
        a’’= subset_sum(-13, [ ]) false
        b’’= subset_sum(-1, [ ])  false
@@ -106,4 +106,47 @@ def intersection(lst_of_lsts):
     
 lsts2 = [[1, 4, 2, 6], [7, 2, 4], [4, 4]]
 intersection(lsts2)
+
+
+# lab notes Lab 04 
+# list comprehension:
+"""[<expression> for <element> in <sequence> if <conditional>]
+"Compute the expression for each element in the sequence if the conditional is true for that element."
+"""
+# Relying on a data abstraction's underlying implementation is known as violating the abstraction barrier, and we never want to do this!
+# The nature of the abstraction barrier guarantees that changing the implementation of an ADT shouldn't affect the functionality of any programs that use that ADT, as long as the constructors and selectors were used properly.
+
+# Q6 
+"""TA explanation.
+(1) If t is a leaf, Use tree constructor.
+Build a new tree in which the lable is the same as the original tree, but nodes values being leaves.
+Input as a list, output a list, use list comprehension.
+
+(2) if t is not a leaf, preserve the tree structure —-> call tree(lable(t), ...)
+Call sprout_leaves to recurse over its branches. We want the branches to be the result of calling sprout_leaves on each branch.
+Changing the current branch list, to a new branch list --> use list comprehension.
+"""
+
+
+# Discussion 05
+"""	•	If the step size is left out, the default step size is 1.
+	•	If the start index is left out, the default start index is the beginning of the list.
+	•	If the end index is left out, the default end index is the end of the list.
+	•	If the step size is negative, the default start index becomes the end of the list, and the default end index becomes the beginning of the list.
+
+lst[:] creates a list that is identical to lst (a copy of lst)
+lst[::-1] creates a list that has the same elements of lst, but reversed. 
+Those rules still apply if more than just the step size is specified e.g. lst[3::-1].
+refer to discussion05 for more exercises and examples.
+"""
+
+# 2.4.2 sequence objects.
+chinese = ['coin', 'string', 'myriad']  # A list literal
+suits = chinese                         # Two names refer to the same list
+# Lists can be copied using the list constructor function. Changes to one list do not affect another, unless they share structure.
+# Changing the list referenced by suits will affect the nested list that is the first element of nest, but not the other elements.
+
+
+
+
 
