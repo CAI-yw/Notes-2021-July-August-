@@ -264,7 +264,11 @@ Definition: A path through a tree is a list of adjacent node values that starts 
 Part A: Implement bigpath, which takes a tree t and an integer n. It returns the number of paths in t whose sum is at least n. Assume that all node values of t are integers.
 
 Part B: Implement allpath which takes a tree t, a one-argument predicate f, a two-argument reducing function g, and a starting value s. It returns the number of paths p in t for which f(reduce(g, p, s)) returns a truthy value. The reduce function is in the code. Pay close attention to the order of arguments to the f function in reduce. You do not need to call it, though.
-
+""" reduce (function, iterable [, initializer])
+Applies function of two arguments cumulatively to the items of iterable, from left to right, so as to reduce the iterable to a single value.
+>>> reduce(lambda x, y: x*y, [1, 2, 3], 0)
+0 # because ((0*1)*2)*3)
+"""
 Part C: Re-implement bigpath (Part A) using allpath (Part B). Assume allpath is implemented correctly.
 def reduce(f, s, initial):
     """Combine elements of s pairwise
@@ -302,7 +306,7 @@ def bigpath(t, n):
         return one(label(t) >= n)
     return sum([bigpath(b, n - label(t)) for b in branches(t)])
 
-def allpath(t, f, g, s):
+def allpath(t, f, g, s): # need future review.
     """ Return the number of paths p in t for which f(reduce(g, p, s)) is truthy.
 
     >>> t = tree(1, [tree(2), tree(3, [tree(4), tree(5)])])
@@ -320,7 +324,7 @@ def allpath(t, f, g, s):
 
 from operator import add , mul
 
-def bigpath_allpath(t, n):
+def bigpath_allpath(t, n): # need future review.
     """Return the number of paths in t that have a sum larger or equal to n.
 
     >>> t = tree(1, [tree(2), tree(3, [tree(4), tree(5)])])
@@ -344,6 +348,13 @@ Balanced
 def balanced(m):
     """Return whether m is balanced.
 
+    >>> t = mobile(arm(1, planet(2)),
+                   arm(2, planet(1)))
+    >>> u = mobile(arm(5, planet(1)),
+                   arm(1, mobile(arm(2, planet(3)),
+                                 arm(3, planet(2)))))
+    >>> v = mobile(arm(4, t), arm(2, u))
+    
     >>> t, u, v = examples()
     >>> balanced(t)
     True
@@ -393,7 +404,7 @@ def dejavu(t, n):
     if is_leaf(t):
         return n == label(t)
     for branch in branches(t):
-        if dejavu(branch, n - label(t)):
+        if dejavu(branch, n - label(t)):   # the idea is similar to Discussion 05 Q11: Forest Path: def bigpath(t, n) function.
             return True
     return False
 
