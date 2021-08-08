@@ -1,4 +1,5 @@
 # replaced Loki! & all the pruning questions& “balanced” questions&hailstone questions
+# Reminder: A branch of a branch of a tree t is not considered to be a branch of t.
 
 """
 Replacing
@@ -38,7 +39,7 @@ def replace_loki_at_leaf(t, lokis_replacement):
     if is_leaf(t) and label(t) == "loki":
         return tree(lokis_replacement)
     else:
-        bs = [replace_loki_at_leaf(b, lokis_replacement) for b in branches(t)]
+        bs = [replace_loki_at_leaf(b, lokis_replacement) for b in branches(t)] # list comprehension
         return tree(label(t), bs)
 
 
@@ -191,9 +192,9 @@ def has_path(t, word):
           l
             o
         y
-    >>> has_path(greetings, 'h')
+    >>> has_path(greetings, 'h') # test 1
     True
-    >>> has_path(greetings, 'i')
+    >>> has_path(greetings, 'i') # test 2
     False
     >>> has_path(greetings, 'hi')
     True
@@ -208,9 +209,9 @@ def has_path(t, word):
     """
     assert len(word) > 0, 'no path for empty word.'
     if label(t) != word[0]:
-        return False
-    elif len(word) == 1:
-        return True
+        return False # refer to test 2
+    elif len(word) == 1: # label(t) == word[0] and len(word) == 1
+        return True # refer to test 1
     for b in branches(t):
         if has_path(b, word[1:]):
             return True
@@ -228,7 +229,7 @@ def max_path_sum(t):
     if is_leaf(t):
       return label(t)
     else:
-      return label(t) + max([max_path_sum(b) for b in branches(t)])
+      return label(t) + max([max_path_sum(b) for b in branches(t)]) # 1 + max(5, 10), accumulating label(t)
   
 # Question 3: Discussion 05 Q7: Find Path  https://cs61a.org/disc/sol-disc05/#q6
 # Write a function that takes in a tree and a value x and returns a list containing the nodes along the path required to get from the root of the tree to a node containing x.
@@ -243,9 +244,16 @@ def find_path(tree, x):
     if label(tree) == x:
         return [label(tree)]
     for b in branches(tree):
-        path = find_path(b, x)
-        if path:
-            return [label(tree)] + path
+        path = find_path(b, x)  
+        if path:   
+            return [label(tree)] + path 
+""" path = find_path(7, 5) --> 
+                         find_path(3, 5) --> None
+                         find_path(6, 5) --> find_path(5, 5) --> True
+                                             find_path(11, 5) --> None
+# find_path(15, 5) --> None
+"""
+
 
 # Question 4: Discussion 05 Q11: Forest Path - Fall 2015 Final Q3 (a)(b)(d) https://cs61a.org/disc/sol-disc05/#q10
 Difficulty: ⭐⭐⭐
