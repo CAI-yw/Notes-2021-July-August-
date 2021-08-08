@@ -101,7 +101,13 @@ def sum_tree(t):
     return label(t) + total
 
     # one line solution
-    return label(t) + sum([sum_tree(b) for b in branches(t)])
+    return label(t) + sum([sum_tree(b) for b in branches(t)]) 
+""" sum the result list
+1) sum(a)
+a is the list , it adds up all the numbers in the list a and takes start to be 0, so returning only the sum of the numbers in the list.
+2) sum(a, start)
+this returns the sum of the list + start 
+"""
 
 # Part B: Implement balanced, a function which takes in a tree and returns whether each of the branches have the same total sum, and each branch is balanced.
 def balanced(t):
@@ -132,7 +138,7 @@ def balanced(t):
     Returns a new tree where any branch that has the predicate of the label
     of the branch returns True has its branches pruned.
 
-    >>> prune_tree(tree(1, [tree(2)]), lambda x: x == 1) # prune at root
+    >>> prune_tree(tree(1, [tree(2)]), lambda x: x == 1) # prune at root  !!
     [1]
     >>> prune_tree(tree(1, [tree(2)]), lambda x: x == 2) # prune at leaf
     [1, [2]]
@@ -143,7 +149,7 @@ def balanced(t):
     >>> prune_tree(test_tree, lambda x: x > 10) == test_tree # prune nothing
     True
     """
-    if predicate(label(t)) or is_leaf(t):
+    if predicate(label(t)) or is_leaf(t): # refer to test 1, if predicate(label(t)) is True, then only returns tree(label(t)).
         return tree(label(t))
     return tree(label(t), [prune_tree(b, predicate) for b in branches(t)])
 
