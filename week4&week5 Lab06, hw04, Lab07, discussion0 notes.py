@@ -179,3 +179,58 @@ Syntax: zip(*iterators) 
 Parameters: Python iterables or containers (list, string etc) 
 Return Value: Returns a single iterator object, having mapped values from all the containers.
 """
+
+
+
+
+# Lab07 https://cs61a.org/lab/sol-lab07/#iterators
+""" We define an iterable as an object on which calling the built-in function iter function returns an iterator. 
+1) An iterable is any object that can be iterated through, or gone through one element at a time.
+2) An iterator is another type of object that allows us to iterate through an iterable by keeping track of which element is next in the sequence.
+
+iterator = iter(iterable)
+next(iterator) ✨ 
+
+3) next(iter(list_iter)) # Calling iter on an iterator returns itself
+4) you cannot call next directly on an iterable.
+>>> lst = [1, 2, 3, 4]
+>>> next(lst)           # Calling next on an iterable
+TypeError: 'list' object is not an iterator
+5) all iterators are iterables, not all iterables are iterators. 
+
+6) Great explanation.
+Analogy: An iterable is like a book (one can flip through the pages) and an iterator for a book would be a bookmark (saves the position and can locate the next page). Calling iter on a book gives you a new bookmark independent of other bookmarks, but calling iter on a bookmark gives you the bookmark itself, without changing its position at all. Calling next on the bookmark moves it to the next page, but does not change the pages in the book. Calling next on the book wouldn't make sense semantically. We can also have multiple bookmarks, all independent of each other.
+"""
+
+
+# Discussion07 https://cs61a.org/disc/sol-disc07/#inheritance
+
+# Normally when defining an __init__ method in a subclass, we take some additional action to calling super().__init__. For example, we could add a new instance variable like the following:
+def __init__(self, name, owner, has_floppy_ears):
+    super().__init__(name, owner)
+    self.has_floppy_ears = has_floppy_ears
+
+super().__init__()
+Butterfly.__init__(self)
+
+# Q8
+class Cat(Pet):
+    def __init__(self, name, owner, lives=9):
+        super().__init__(name, owner)
+        self.lives = lives
+    def talk(self):
+        print(self.name + ' says meow!')
+
+class NoisyCat(Cat):
+    super().talk()
+    super().talk()
+     # alternatively, you can use Cat.talk(self) here
+
+
+
+
+
+
+
+
+
