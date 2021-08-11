@@ -70,10 +70,11 @@ def non_decrease_subseqs(s):
         if not s:
             return [[]]
         elif s[0] < prev:
-            return subseq_helper(s[1:], prev)
+            return subseq_helper(s[1:], prev) 
+        # prev is the bigger number, then hold prev, and compare prev with the rest numbers in s
         else:
-            a = subseq_helper(s[1:], s[0])
-            b = subseq_helper(s[1:], prev)
+            a = subseq_helper(s[1:], s[0]) # s[0] is the larger number, then use s[0] to compare with the rest numbers
+            b = subseq_helper(s[1:], prev) # leave s[0] behind
             return insert_into_all(s[0], a) + b
     return subseq_helper(s, 0)
 
