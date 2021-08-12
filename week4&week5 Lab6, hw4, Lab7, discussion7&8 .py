@@ -1,5 +1,4 @@
 # https://cs61a.org/lab/sol-lab06/
-
 # Q2, Q3 subsequences. 
 # You can mutate a slice of a list using slice assignment. The slice and the given list need not be the same length.
 >>> a = [1, 2, 3, 4, 5, 6]
@@ -183,6 +182,10 @@ Return Value: Returns a single iterator object, having mapped values from all t
 
 
 
+
+
+
+
 # Lab07 https://cs61a.org/lab/sol-lab07/#iterators
 """ We define an iterable as an object on which calling the built-in function iter function returns an iterator. 
 1) An iterable is any object that can be iterated through, or gone through one element at a time.
@@ -203,8 +206,14 @@ Analogy: An iterable is like a book (one can flip through the pages) and an iter
 """
 
 
-# Discussion07 https://cs61a.org/disc/sol-disc07/#inheritance
 
+
+
+
+
+
+
+# Discussion07 https://cs61a.org/disc/sol-disc07/#inheritance
 # Normally when defining an __init__ method in a subclass, we take some additional action to calling super().__init__. For example, we could add a new instance variable like the following:
 def __init__(self, name, owner, has_floppy_ears):
     super().__init__(name, owner)
@@ -225,12 +234,128 @@ class NoisyCat(Cat):
     super().talk()
     super().talk()
      # alternatively, you can use Cat.talk(self) here
+        
 
+        
+        
+        
+# hw4 https://cs61a.org/hw/sol-hw04/#q2
+def permutations(seq):
+    """Generates all permutations of the given sequence. Each permutation is a list of the elements in SEQ in a different order. The permutations may be yielded in any order.
 
+    >>> perms = permutations([100])
+    >>> type(perms)
+    <class 'generator'>
+    >>> next(perms)
+    [100]
+    >>> try: #this piece of code prints "No more permutations!" if calling next would cause an error
+    ...     next(perms)
+    ... except StopIteration:
+    ...     print('No more permutations!')
+    No more permutations!
+    >>> sorted(permutations([1, 2, 3])) # Returns a sorted list containing elements of the generator
+    [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
+    >>> sorted(permutations((10, 20, 30)))
+    [[10, 20, 30], [10, 30, 20], [20, 10, 30], [20, 30, 10], [30, 10, 20], [30, 20, 10]]
+    >>> sorted(permutations("ab"))
+    [['a', 'b'], ['b', 'a']]
+    """
+    if not seq:
+        yield []
+    else:
+        for perm in permutations(seq[1:]):
+            for i in range(len(seq)):
+                yield perm[:i] + [seq[0]] + perm[i:]
 
+"""
+permutations([1, 2, 3])
+[1, 2, 3], [1, 3, 2]
+[2, 1, 3], [2, 3, 1]
+[3, 1, 2], [3, 2, 1]
+"""
 
+# Q3: Generators generator
+def make_generators_generator(g):
+    """Generates all the "sub"-generators of the generator returned by
+    the generator function g."""    
+    def gener(x):
+        for e in g():
+            yield e
+            if e == x:
+                return
+    for e in g():
+        yield gener(e)
+""">>> def every_m_ints_to(n, m):
+    ...     i = 0
+    ...     while (i <= n):
+    ...         yield i
+    ...         i += m
+    ...
+    >>> def every_3_ints_to_10():
+    ...     for item in every_m_ints_to(10, 3):
+    ...         yield item
+    ...
+    >>> for gen in make_generators_generator(every_3_ints_to_10):
+    ...     print("Next Generator:")
+    ...     for item in gen:
+    ...         print(item)
+    ...
+    Next Generator:
+    0
+    Next Generator:
+    0
+    3
+    Next Generator:
+    0
+    3
+    6
+    Next Generator:
+    0
+    3
+    6
+    9 
+    """
 
+        
+        
+        
+        
+        
+# lab8 https://cs61a.org/lab/sol-lab08/
+# Q6
+def add_d_leaves(t, v):
+    """Add d leaves containing v to each node at every depth d.
 
+    >>> t_one_to_four = Tree(1, [Tree(2), Tree(3, [Tree(4)])])
+    >>> print(t_one_to_four)
+    1
+      2
+      3
+        4
+    >>> add_d_leaves(t_one_to_four, 5)
+    >>> print(t_one_to_four)
+    1
+      2
+        5
+      3
+        4
+          5
+          5
+        5
+        """
+    def add_leaves(t, d):
+        
+        """Adds a number of leaves to each node in t equivalent to the depth of
+        the node, assuming that the root node is at depth d, the children of
+        the root node are at depth d + 1, and so on."""
+        
+        for b in t.branches:
+            add_leaves(b, d + 1) 
+        t.branches.extend([Tree(v) for _ in range(d)])
+    add_leaves(t, 0)
 
-
-
+"""
+each recursive call should've successfully added the correct number of leaves at each node in each branch. 
+That means that the only step left is to add the correct number of leaves to the current node!
+Do we need an explicitly base case? Let's take a look at what happens when t is a leaf. In that case, t.branches would be an empty list, so we would not enter the for loop. Then, the function will extend t.branches, which is an empty list, by a list containing the new leaves. This is exactly the desired result, so no base case is needed!
+"""
