@@ -234,6 +234,7 @@ def max_path_sum(t):
 # Question 3: Discussion 05 Q7: Find Path  https://cs61a.org/disc/sol-disc05/#q6
 # Write a function that takes in a tree and a value x and returns a list containing the nodes along the path required to get from the root of the tree to a node containing x.
 # If x is not present in the tree, return None. Assume that the entries of the tree are unique.
+# [walkthrough video]
 def find_path(tree, x):
     """
     >>> t = tree(2, [tree(7, [tree(3), tree(6, [tree(5), tree(11)])] ), tree(15)])
@@ -337,7 +338,66 @@ def bigpath_allpath(t, n): # need future review.
     """
     return allpath(t, lambda x: x >= n, add, 0)        
           
-          
+# Question 5: Discussion 08 Q8: Find Paths    https://cs61a.org/disc/sol-disc08/#q8
+def find_paths(t, entry):
+    """
+    >>> tree_ex = Tree(2, [Tree(7, [Tree(3), Tree(6, [Tree(5), Tree(11)])]), Tree(1, [Tree(5)])])
+    >>> find_paths(tree_ex, 5)
+    [[2, 7, 6, 5], [2, 1, 5]]
+    >>> find_paths(tree_ex, 12)
+    []
+    """
+
+    paths = []
+    if t.label == entry:
+        paths.append([t.label])
+    for b in t.branches:
+        for path in find_paths(b, entry):
+            paths.append([t.label] + path)
+    return paths
+        
+# Question 6: homework 5 Q4: Yield Paths
+# Define a generator function path_yielder which takes in a Tree t, a value value, and returns a generator object which yields each path from the root of t to a node that has label value.
+# t is implemented with a class, not as the function-based ADT.
+# Each path should be represented as a list of the labels along that path in the tree. You may yield the paths in any order.
+def path_yielder(t, value):
+    """Yields all possible paths from the root of t to a node with the label value
+    as a list.
+
+    >>> t2 = Tree(0, [Tree(2, [t1])])
+    >>> print(t2)
+    0
+      2
+        1
+          2
+            3
+            4
+              6
+            5
+          5
+    >>> path_to_2 = path_yielder(t2, 2)
+    >>> sorted(list(path_to_2))
+    [[0, 2], [0, 2, 1, 2]]
+    """
+
+    if t.label == value: # determine if our current label is equal to value
+    	yield [value]
+
+    for b in t.branches: 
+    	for path in path_yielder(b, value): # call path_yielder on each of the branches
+
+    		yield [t.label] + path # add our current label to the beinning of a path --> a path starting from the root
+        # see if there are any paths starting from one of our branches that ends at a node containing value.
+"""
+!! Important Explanation: 
+If our current label is equal to value, we've found a path from the root to a node containing value containing only our current label, so we should yield that. 
+From there, we'll see if there are any paths [starting from one of our branches that ends at a node containing value.] If we find these "partial paths" we can simply add our current label to the beinning of a path to obtain a path starting from the root.
+
+In order to do this, we'll [create a generator for each of the branches which yields these "partial paths".] By calling path_yielder on each of the branches, we'll create exactly this generator! Then, since a generator is also an iterable, we can iterate over the paths in this generator and yield the result of concatenating it with our current label.
+"""
+        
+        
+        
 """
 Balanced
 """
